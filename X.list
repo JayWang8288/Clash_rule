@@ -1,2 +1,4 @@
 # 创建X微博策略
 DOMAIN-SUFFIX,x.com
+DOMAIN-SUFFIX,twitter.com
+DOMAIN-SUFFIX,twimg.com
