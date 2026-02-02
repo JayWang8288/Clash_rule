@@ -4,56 +4,7 @@
 
 # 机场节点订阅
 
-proxy-providers:
 
-  GFW:
-    url: "https://www10th.ga-sub.lat/api/v1/client/subscribe?token=7aae0098a4093f0b8b8367c7f73dd104"
-    type: http
-    interval: 600
-    override:
-      additional-prefix: "GFW | "
-    health-check:
-      enable: true
-      url: https://www.gstatic.com/generate_204
-      interval: 180
-    proxy: 直连
-
-  BEUP:
-    url: "https://i.stga.cn/api/v1/client/subscribe?token=53f257fc2be6e9243f374782997ff11f"
-    type: http
-    interval: 0
-    override:
-      additional-prefix: "BEUP | "
-    health-check:
-      enable: true
-      url: https://www.gstatic.com/generate_204
-      interval: 180
-    proxy: 直连
-
-  火烧云:
-    url: "https://onehsy.yeniudsss.us/mj/v8/front/mysubnew?token=750ea56ab01d629f59785bc5fd374792&timestamp=1766753011&sign=1d5b4b4fae82f57b43880c9eede30b92"
-    type: http
-    interval: 0
-    override:
-      additional-prefix: "火烧云 | "
-    health-check:
-      enable: true
-      url: https://www.gstatic.com/generate_204
-      interval: 180
-    proxy: 直连
-
-
-  HAIYU:
-    url: "https://a.haiyucloud.com/api/v1/client/subscribe?token=8f2607e801624a3f502d29d425bd2edf"
-    type: http
-    interval: 0
-    override:
-      additional-prefix: "HAIYU | "
-    health-check:
-      enable: true
-      url: https://www.gstatic.com/generate_204
-      interval: 180
-    proxy: 直连
 
 
 proxies:
