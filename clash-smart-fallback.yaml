@@ -1,0 +1,672 @@
+# ========================
+# Clash-ALL 优化配置
+# ========================
+
+# 机场节点订阅
+
+proxy-providers:
+
+  GFW:
+    url: "https://www10th.ga-sub.lat/api/v1/client/subscribe?token=7aae0098a4093f0b8b8367c7f73dd104"
+    type: http
+    interval: 600
+    override:
+      additional-prefix: "GFW | "
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 180
+    proxy: 直连
+
+  BEUP:
+    url: "https://i.stga.cn/api/v1/client/subscribe?token=53f257fc2be6e9243f374782997ff11f"
+    type: http
+    interval: 0
+    override:
+      additional-prefix: "BEUP | "
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 180
+    proxy: 直连
+
+  火烧云:
+    url: "https://onehsy.yeniudsss.us/mj/v8/front/mysubnew?token=750ea56ab01d629f59785bc5fd374792&timestamp=1766753011&sign=1d5b4b4fae82f57b43880c9eede30b92"
+    type: http
+    interval: 0
+    override:
+      additional-prefix: "火烧云 | "
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 180
+    proxy: 直连
+
+
+  HAIYU:
+    url: "https://a.haiyucloud.com/api/v1/client/subscribe?token=8f2607e801624a3f502d29d425bd2edf"
+    type: http
+    interval: 0
+    override:
+      additional-prefix: "HAIYU | "
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 180
+    proxy: 直连
+
+
+proxies:
+  - {name: 直连, type: direct}
+  - {name: 拒绝, type: reject}
+
+
+# ========================
+# 主要端口设置
+# ========================
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7895
+
+allow-lan: true
+mode: rule
+log-level: info
+
+external-controller: 0.0.0.0:9090
+# external-ui: ui
+# external-ui-name: zashboard
+# external-ui-url: https://gh-proxy.com/GitHub.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip
+secret: "123456"
+
+
+# ========================
+# DNS 设置
+# ========================
+dns:
+  enable: true
+  listen: 0.0.0.0:7874
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.20.0.1/16
+  nameserver:
+    - 223.5.5.5
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - +.lan
+    - +.local
+    - geosite:cn
+# 快猫
+    - +.km688.ink
+# 火烧
+    - +.onesubv.site
+    - +.oneyyds.online
+    - +.fengyyds.site
+    - +.onemg.top
+# 猫耳
+    - +.chybinc.com
+# BestVPN
+    - +.invitevp.com
+    - +.vp2.us
+# 小牛
+    - +.xiaoniuyun.cc
+# 硅谷
+    - +.apple-bing.sbs
+# 无界
+    - +.bncrcloud.com
+# 冰云
+    - +.xby01.xyz
+# 牛逼
+    - +.idsduf.com
+    - +.66jc.top
+# 极速通
+    - +.gfw.gg
+# 萌狗
+    - +.moedog.cloud
+
+# 其他
+    - +.ynhtbank.com
+    - +.qeayr.cn
+    - +.saojc.xyz
+    - +.sssyun.xyz
+    - +.dler.cloud
+    - +.0tk8a3a1q4t94dler.com
+    - +.aerianas.top
+    - +.gptacg.top
+    - +.wxda.net
+
+ipv6: false
+
+
+# ========================
+# TUN 模块
+# ========================
+tun:
+  enable: true
+  stack: gvisor
+  device: utun
+  endpoint-independent-nat: true
+  auto-route: false
+  auto-detect-interface: false
+  auto-redirect: false
+  strict-route: false
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+
+# ========================
+# 策略组定义
+# ========================
+default: &default
+  type: select
+  proxies:
+    - 直连
+    - 所有-智选
+    - 所有-手选
+    - 所有-故转
+    - 香港-智选
+    - 香港-故转
+    - 美国-智选
+    - 美国-故转
+    - 台湾-智选
+    - 台湾-故转
+    - 日本-智选
+    - 日本-故转
+    - 新加坡-智选
+    - 新加坡-故转
+    - 拒绝
+
+
+proxy-groups:
+  # AI APPS
+  - { name: ChatGPT, <<: *default }
+  - { name: Gemini, <<: *default }
+  - { name: Grok, <<: *default }
+
+  # Search Engine APPS
+  - { name: Google, <<: *default }
+
+  # Blog APPS
+  - { name: X, <<: *default }
+  - { name: Telegram, <<: *default }
+  - { name: Reddit, <<: *default }
+  - { name: Facebook, <<: *default }
+
+  # Game APPS
+  - { name: Steam, <<: *default }
+
+  # Office APPS
+  - { name: Nvidia, <<: *default }
+  - { name: Apple, <<: *default }
+  - { name: Microsoft, <<: *default }
+  - { name: GitHub, <<: *default }
+
+  # Media APPS
+  - { name: YouTube, <<: *default }
+  - { name: TikTok, <<: *default }
+  - { name: Netflix, <<: *default }
+  - { name: Disney, <<: *default }
+  - { name: AmazonPrimeVideo, <<: *default }
+  - { name: HBO, <<: *default }
+  - { name: ParamountPlus, <<: *default }
+
+  # Country
+  - { name: America, <<: *default }
+  - { name: Hong Kong, <<: *default }
+  - { name: Taiwan, <<: *default }
+  - { name: Singapore, <<: *default }
+
+  # Other
+  - { name: 国外, <<: *default }
+  - { name: 国内, <<: *default }
+  - { name: 其他, <<: *default }
+
+  # 策略组
+
+  # 所有组
+  - name: 所有-故转
+    type: fallback
+    interval: 120
+    lazy: false
+    proxies:
+      - 所有-手选
+      - 所有-智选
+
+  - name: 所有-手选
+    type: select
+    include-all: true
+    filter: "^((?!(直连|拒绝|剩余流量|距离下次重置剩余|套餐到期|国内地址|Emby)).)*$"
+
+  - name: 所有-智选
+    type: smart
+
+      # --- 节点来源 ---
+    include-all: true
+    filter: "^((?!(直连|拒绝|剩余流量|距离下次重置剩余|套餐到期|国内地址|Emby)).)*$"
+
+     # --- 权重 ---
+    policy-priority: ".*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*:1.9;.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*:1.6;.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States|California)).*:1.3"
+    default-priority: 1
+
+    # --- 调度 ---
+    strategy: sticky-sessions
+    session-timeout: 300
+
+    # --- Smart 评估 ---
+    interval: 120
+    recheck-interval: 40
+
+    # --- 智能/ML ---
+    uselightgbm: true
+    lgbm-weight: 0.3
+    collectdata: false
+    # sample-rate: 0.7
+
+    # --- 失败惩罚 ---
+    max-failed-times: 3 
+    failure-penalty: 0.8
+    recovery-boost: 1.1
+
+    # --- ASN/Geo ---
+    prefer-asn: true
+    prefer-geoip: true
+
+    # --- Health Check 子层级 ---
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 120
+      tolerance: 2
+      timeout: 3000
+      lazy: true
+
+  # 香港组
+
+  - name: 香港-故转
+    type: fallback
+    interval: 120
+    lazy: false
+    proxies:
+      - 香港-手选
+      - 香港-智选
+
+  - name: 香港-手选
+    type: select
+    include-all: true
+    filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$"
+
+  - name: 香港-智选
+    type: smart
+
+      # --- 节点来源 ---
+    include-all: true
+    filter: "(?=.*(广港|香港|HK|Hong Kong|🇭🇰|HongKong)).*$"
+
+     # --- 权重 ---
+    policy-priority: ".*BEUP.*:1.9;.*火烧云.*:1.6;.*HAIYU.*:1.3;.*GFW.*:1"
+    default-priority: 1
+
+    # --- 调度 ---
+    strategy: sticky-sessions
+    session-timeout: 300
+
+    # --- Smart 评估 ---
+    interval: 120
+    recheck-interval: 40
+
+    # --- 智能/ML ---
+    uselightgbm: true
+    lgbm-weight: 0.3
+    collectdata: false
+    # sample-rate: 0.7
+
+    # --- 失败惩罚 ---
+    max-failed-times: 3 
+    failure-penalty: 0.8
+    recovery-boost: 1.1
+
+    # --- ASN/Geo ---
+    prefer-asn: true
+    prefer-geoip: true
+
+    # --- Health Check 子层级 ---
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 120
+      tolerance: 2
+      timeout: 3000
+      lazy: true
+
+  # 台湾组
+
+  - name: 台湾-故转
+    type: fallback
+    interval: 180
+    lazy: false
+    proxies:
+      - 台湾-手选
+      - 台湾-智选
+
+  - name: 台湾-手选
+    type: select
+    include-all: true
+    filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$"
+
+  - name: 台湾-智选
+    type: smart
+
+      # --- 节点来源 ---
+    include-all: true
+    filter: "(?=.*(广台|台湾|台灣|TW|Tai Wan|🇹🇼|🇨🇳|TaiWan|Taiwan)).*$"
+
+     # --- 权重 ---
+    policy-priority: ".*BEUP.*:1.9;.*火烧云.*:1.6;.*HAIYU.*:1.3;.*GFW.*:1"
+    default-priority: 1
+
+    # --- 调度 ---
+    strategy: sticky-sessions
+    session-timeout: 300
+
+    # --- Smart 评估 ---
+    interval: 120
+    recheck-interval: 40
+
+    # --- 智能/ML ---
+    uselightgbm: true
+    lgbm-weight: 0.3
+    collectdata: false
+    # sample-rate: 0.7
+
+    # --- 失败惩罚 ---
+    max-failed-times: 3 
+    failure-penalty: 0.8
+    recovery-boost: 1.1
+
+    # --- ASN/Geo ---
+    prefer-asn: true
+    prefer-geoip: true
+
+    # --- Health Check 子层级 ---
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 120
+      tolerance: 2
+      timeout: 3000
+      lazy: true
+
+  # 日本组
+
+  - name: 日本-故转
+    type: fallback
+    interval: 180
+    lazy: false
+    proxies:
+      - 日本-手选
+      - 日本-智选
+
+  - name: 日本-手选
+    type: select
+    include-all: true
+    filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|Tokyo)).*$"
+
+  - name: 日本-智选
+    type: smart
+
+      # --- 节点来源 ---
+    include-all: true
+    filter: "(?=.*(广日|日本|JP|川日|东京|大阪|泉日|埼玉|沪日|深日|🇯🇵|Japan|Tokyo)).*$"
+
+     # --- 权重 ---
+    policy-priority: ".*BEUP.*:1.9;.*火烧云.*:1.6;.*HAIYU.*:1.3;.*GFW.*:1"
+    default-priority: 1
+
+    # --- 调度 ---
+    strategy: sticky-sessions
+    session-timeout: 300
+
+    # --- Smart 评估 ---
+    interval: 120
+    recheck-interval: 40
+
+    # --- 智能/ML ---
+    uselightgbm: true
+    lgbm-weight: 0.3
+    collectdata: false
+    # sample-rate: 0.7
+
+    # --- 失败惩罚 ---
+    max-failed-times: 3 
+    failure-penalty: 0.8
+    recovery-boost: 1.1
+
+    # --- ASN/Geo ---
+    prefer-asn: true
+    prefer-geoip: true
+
+    # --- Health Check 子层级 ---
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 120
+      tolerance: 2
+      timeout: 3000
+      lazy: true
+
+  # 新加坡组
+
+  - name: 新加坡-故转
+    type: fallback
+    interval: 180
+    lazy: false
+    proxies:
+      - 新加坡-手选
+      - 新加坡-智选
+
+  - name: 新加坡-手选
+    type: select
+    include-all: true
+    filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$"
+
+  - name: 新加坡-智选
+    type: smart
+
+      # --- 节点来源 ---
+    include-all: true
+    filter: "(?=.*(广新|新加坡|SG|坡|狮城|🇸🇬|Singapore)).*$"
+
+     # --- 权重 ---
+    policy-priority: ".*BEUP.*:1.9;.*火烧云.*:1.6;.*HAIYU.*:1.3;.*GFW.*:1"
+    default-priority: 1
+
+    # --- 调度 ---
+    strategy: sticky-sessions
+    session-timeout: 300
+
+    # --- Smart 评估 ---
+    interval: 120
+    recheck-interval: 40
+
+    # --- 智能/ML ---
+    uselightgbm: true
+    lgbm-weight: 0.3
+    collectdata: false
+    # sample-rate: 0.7
+
+    # --- 失败惩罚 ---
+    max-failed-times: 3 
+    failure-penalty: 0.8
+    recovery-boost: 1.1
+
+    # --- ASN/Geo ---
+    prefer-asn: true
+    prefer-geoip: true
+
+    # --- Health Check 子层级 ---
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 120
+      tolerance: 2
+      timeout: 3000
+      lazy: true
+
+  # 美国组
+
+  - name: 美国-故转
+    type: fallback
+    interval: 180
+    lazy: false
+    proxies:
+      - 美国-手选
+      - 美国-智选
+
+  - name: 美国-手选
+    type: select
+    include-all: true
+    filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States|California)).*$"
+
+  - name: 美国-智选
+    type: smart
+
+      # --- 节点来源 ---
+    include-all: true
+    filter: "(?=.*(广美|US|美国|纽约|波特兰|达拉斯|俄勒|凤凰城|费利蒙|洛杉|圣何塞|圣克拉|西雅|芝加|🇺🇸|United States|California)).*$"
+
+     # --- 权重 ---
+    policy-priority: ".*BEUP.*:1.9;.*火烧云.*:1.6;.*HAIYU.*:1.3;.*GFW.*:1"
+    default-priority: 1
+
+    # --- 调度 ---
+    strategy: sticky-sessions
+    session-timeout: 300
+
+    # --- Smart 评估 ---
+    interval: 120
+    recheck-interval: 40
+
+    # --- 智能/ML ---
+    uselightgbm: true
+    lgbm-weight: 0.3
+    collectdata: false
+    # sample-rate: 0.7
+
+    # --- 失败惩罚 ---
+    max-failed-times: 3 
+    failure-penalty: 0.8
+    recovery-boost: 1.1
+
+    # --- ASN/Geo ---
+    prefer-asn: true
+    prefer-geoip: true
+
+    # --- Health Check 子层级 ---
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 120
+      tolerance: 2
+      timeout: 3000
+      lazy: true
+
+
+# ========================
+# 规则引擎（rules）
+# ========================
+rules:
+  # AI APPS
+  - RULE-SET,ChatGPT / Domain,ChatGPT
+  - RULE-SET,Gemini / Domain,Gemini
+  - RULE-SET,Grok / Domain,Grok
+
+  # Search Engine APPS
+  - RULE-SET,Google / Domain,Google
+
+  # Blog APPS
+  - RULE-SET,X / Domain,X
+  - RULE-SET,Telegram / Domain,Telegram
+  - RULE-SET,Reddit / Domain,Reddit
+  - RULE-SET,Facebook / Domain,Facebook
+
+  # Game APPS
+  - RULE-SET,Steam / Domain,Steam
+
+  # Office APPS
+  - RULE-SET,Nvidia / Domain,Nvidia
+  - RULE-SET,Apple / Domain,Apple
+  - RULE-SET,AppStore / Domain,Apple
+  - RULE-SET,AppleMusic / Domain,Apple
+  - RULE-SET,FitnessPlus / Domain,Apple
+  - RULE-SET,Microsoft / Domain,Microsoft
+  - RULE-SET,GitHub / Domain,GitHub
+
+  # Media APPS
+  - RULE-SET,YouTube / Domain,YouTube
+  - RULE-SET,YouTubeMusic / Domain,YouTube
+  - RULE-SET,TikTok / Domain,TikTok
+  - RULE-SET,Netflix / Domain,Netflix
+  - RULE-SET,Disney / Domain,Disney
+  - RULE-SET,AmazonPrimeVideo / Domain,AmazonPrimeVideo
+  - RULE-SET,HBO / Domain,HBO
+  - RULE-SET,ParamountPlus / Domain,ParamountPlus
+
+  # Other
+  - RULE-SET,Direct / Domain,国内
+  - RULE-SET,China / Domain,国内
+  - RULE-SET,ChinaIP / IP,国内,no-resolve
+  - RULE-SET,Private / Domain,国内
+  - RULE-SET,Proxy / Domain,国外
+  - RULE-SET,Globe / Domain,国外
+  - MATCH,其他
+
+
+# ========================
+# 规则集提供者
+# ========================
+rule-anchor:
+  ip: &ip {type: http, interval: 86400, behavior: ipcidr, format: text}
+  domain: &domain {type: http, interval: 86400, behavior: domain, format: mrs}
+  class: &class {type: http, interval: 86400, behavior: classical, format: text}
+
+rule-providers:
+  # AI APPS
+  ChatGPT / Domain: {<<: *class, url: "https://gh-proxy.com/raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/OpenAI/OpenAI.list"}
+  Gemini / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Gemini/Gemini.list"}
+  Grok / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/JayWang8288/Clash_rule/main/Grok.list"}
+  # Search Engine APPS
+  Google / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Google/Google.list"}
+  # Blog APPS
+  X / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Twitter/Twitter.list"}
+  Telegram / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.list"}
+  Reddit / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Reddit/Reddit.list"}
+  Facebook / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Facebook/Facebook.list"}
+  # Game APPS
+  Steam / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Steam/Steam.list"}
+  # Office APPS
+  Nvidia / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Nvidia/Nvidia.list"}
+  Apple / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple.list"}
+  AppStore / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AppStore/AppStore.list"}
+  AppleMusic / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AppleMusic/AppleMusic.list"}
+  FitnessPlus / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/FitnessPlus/FitnessPlus.list"}
+  Microsoft / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Microsoft/Microsoft.list"}
+  GitHub / Domain: {<<: *class, url: "https://gh-proxy.com/raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/GitHub/GitHub.list"}
+  # Media APPS
+  YouTube / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.list"}
+  YouTubeMusic / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTubeMusic/YouTubeMusic.list"}
+  TikTok / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/TikTok/TikTok.list"}
+  Netflix / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.list"}
+  Disney / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Disney/Disney.list"}
+  AmazonPrimeVideo / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/AmazonPrimeVideo/AmazonPrimeVideo.list"}
+  HBO / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/HBO/HBO.list"}
+  ParamountPlus / Domain: {<<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ParamountPlus/ParamountPlus.list"}
+  # Other
+  Proxy / Domain: { <<: *class, url: "https://gh-proxy.com/raw.githubusercontent.com/JayWang8288/Clash_rule/main/Proxy.list"}
+  Globe / Domain: { <<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Global/Global.list"}
+  Direct / Domain: {<<: *class, url: "https://gh-proxy.com/raw.githubusercontent.com/JayWang8288/Clash_rule/main/Direct.list"}
+  China / Domain: { <<: *class, url: "https://gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geosite/cn.list"}
+  ChinaIP / IP: { <<: *ip, url: "https://gh-proxy.org/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/refs/heads/meta/geo/geoip/cn.list"}
+  Private / Domain: {<<: *domain, url: "https://gh-proxy.com/github.com/metacubex/meta-rules-dat/raw/refs/heads/meta/geo/geosite/private.mrs"}
